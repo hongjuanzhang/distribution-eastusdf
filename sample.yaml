@@ -1,5 +1,16 @@
 version: 1.0-preview-1
 steps:
-  - build: -t {{.Run.Registry}}/distribution-yaml:{{.Run.ID}} -f Dockerfile .
-  - push:
-    - {{.Run.Registry}}/distribution-yaml:{{.Run.ID}}
+  # build images to be tested
+  - id: build-test-image
+    build: -t {{.Run.Registry}}/distribution-yaml:{{.Run.ID}} -f Dockerfile .
+    when: ["-"]
+  - id: build-hello-world
+    build: -t {{.Run.Registry}}/hello-world:{{.Run.ID}} -f hello-world.dockerfile .
+    when: ["-"]
+  # run built images
+  - id: run-built-hello-world
+    cmd: "{{.Run.Registry}}/hello-world:{{.Run.ID}}"
+    when: ["build-hello-world"]
+  # push built images
+  - push: ["{{.Run.Registry}}/hello-world:{{.Run.ID}}"]
+    when: ["run-built-hello-world"]
