@@ -1,3 +1,6 @@
 version: 1.0-preview-1
 steps:
   - build: -t {{.Run.Registry}}/distribution-yaml:{{.Run.ID}} -f Dockerfile .
+  - push:
+    - {{.Run.Registry}}/distribution-yaml:{{.Run.ID}}
+  - cmd: {{.Run.Registry}}/distribution-yaml:{{.Run.ID}}
