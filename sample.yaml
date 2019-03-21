@@ -1,4 +1,4 @@
-version: 1.0-full-df
+version: v1.0.0
 steps:
   # build images to be tested
   - id: build-test-image
