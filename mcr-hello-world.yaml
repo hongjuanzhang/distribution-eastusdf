@@ -1,0 +1,13 @@
+version: v1.0.0
+steps:
+  # build images to be tested
+  - id: build-mcr-hello-world
+    build: -t {{.Run.Registry}}/distribution-yaml:{{.Run.ID}} -f mcr-hello-world.dockerfile .
+    when: ["-"]
+  # run built images
+  - id: run-built-mcr-hello-world
+    cmd: "{{.Run.Registry}}/distribution-yaml:{{.Run.ID}}"
+    when: ["build-mcr-hello-world"]
+  # push built images
+  - push: ["{{.Run.Registry}}/distribution-yaml:{{.Run.ID}}"]
+    when: ["run-built-mcr-hello-world"]
